@@ -30,6 +30,7 @@
     "ethers": "^5.0.24",
     "fs-extra": "^9.0.1",
     "hardhat": "^2.0.10",
+    "hardhat-tracer": "^1.0.0-alpha.1",
     "hardhat-typechain": "^0.3.5",
     "husky": "^4.3.0",
     "mocha": "^8.1.3",

@@ -1,28 +1,26 @@
-import { Signer } from "@ethersproject/abstract-signer";
-import { ethers, waffle } from "hardhat";
+import hre from "hardhat";
+import { Artifact } from "hardhat/types";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 
-import GreeterArtifact from "../artifacts/contracts/Greeter.sol/Greeter.json";
-
-import { Accounts, Signers } from "../types";
 import { Greeter } from "../typechain/Greeter";
+import { Signers } from "../types";
 import { shouldBehaveLikeGreeter } from "./Greeter.behavior";
 
-const { deployContract } = waffle;
+const { deployContract } = hre.waffle;
 
 describe("Unit tests", function () {
   before(async function () {
-    this.accounts = {} as Accounts;
     this.signers = {} as Signers;
 
-    const signers: Signer[] = await ethers.getSigners();
+    const signers: SignerWithAddress[] = await hre.ethers.getSigners();
     this.signers.admin = signers[0];
-    this.accounts.admin = await signers[0].getAddress();
   });
 
   describe("Greeter", function () {
     beforeEach(async function () {
       const greeting: string = "Hello, world!";
-      this.greeter = (await deployContract(this.signers.admin, GreeterArtifact, [greeting])) as Greeter;
+      const greeterArtifact: Artifact = await hre.artifacts.readArtifact("Greeter");
+      this.greeter = <Greeter>await deployContract(this.signers.admin, greeterArtifact, [greeting]);
     });
 
     shouldBehaveLikeGreeter();
